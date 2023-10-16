@@ -7,6 +7,8 @@ namespace Application.UnitOfWork;
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly GardenContext _context;
+    private RolRepository _rolesRepository;
+    private UserRepository _usersRepository;
     private ClienteRepository _clienteRepository;
     private DetallePedidoRepository _detallePedidoRepository;
     private EmpleadoRepository _empleadoRepository;
@@ -19,6 +21,30 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public UnitOfWork(GardenContext context)
     {
         _context = context;
+    }
+
+    public IRol Roles
+    {
+        get
+        {
+            if (_rolesRepository == null)
+            {
+                _rolesRepository = new RolRepository(_context);
+            }
+            return _rolesRepository;
+        }
+    }
+
+    public IUser Users
+    {
+        get
+        {
+            if (_usersRepository == null)
+            {
+                _usersRepository = new UserRepository(_context);
+            }
+            return _usersRepository;
+        }
     }
 
     public ICliente Clientes
