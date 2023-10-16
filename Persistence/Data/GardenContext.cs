@@ -11,6 +11,8 @@ public partial class GardenContext : DbContext
     public GardenContext(DbContextOptions<GardenContext> options)
         : base(options) { }
 
+    public DbSet<Rol> Roles { get; set; }
+    public DbSet<User> Users { get; set; }
     public virtual DbSet<Cliente> Clientes { get; set; }
 
     public virtual DbSet<DetallePedido> DetallePedidos { get; set; }

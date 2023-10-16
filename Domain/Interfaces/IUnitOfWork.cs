@@ -2,6 +2,8 @@ namespace Domain.Interfaces;
 
 public interface IUnitOfWork
 {
+    IRol Roles { get; }
+    IUser Users { get; }
     ICliente Clientes { get; }
     IDetallePedido DetallePedidos { get; }
     IEmpleado Empleados { get; }
