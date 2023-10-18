@@ -3,8 +3,15 @@ using Api.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Persistence.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+var logger = new LoggerConfiguration().ReadFrom
+    .Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 
