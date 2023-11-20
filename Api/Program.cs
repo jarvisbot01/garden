@@ -1,6 +1,7 @@
 using System.Reflection;
 using Api.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Persistence.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,45 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+builder.Services.AddJwt(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddJwt(builder.Configuration);
+builder
+    .Services
+    .AddSwaggerGen(c =>
+    {
+        c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Garden Kathe", Version = "v1" });
+        c.AddSecurityDefinition(
+            "Bearer",
+            new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please insert token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            }
+        );
+        c.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            }
+        );
+    });
 
 builder
     .Services
