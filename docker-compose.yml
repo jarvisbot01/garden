@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  garden:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    volumes:
+      - /home/jose/Docker/data:/logs
+    networks:
+      - garden
+
+networks:
+  garden:
+    external: true
